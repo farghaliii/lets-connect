@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Let's Connect</title>
+    <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+<body>
+    <div class="container" id="container">
+        <h1 class="ext-title">Let's Connect!</h1>
+        <div class="ext-filters">
+            <div class="my-1">
+                <label for="scrolling-period">Scrolling Period (Min)</label>
+                <input type="number" min="1" id="scrolling-period" value="1" name="period">
+                <p>By default 1 Minute</p>
+            </div>
+            <div class="my-1">
+                <label for="filters"><abbr title="You can add keywords as a filter, between each keyword add a comma ','">Filters</abbr></label>
+                <input type="text" id="filters" name="filters" placeholder="developer, hr, cto, php, js, ..etc">
+                <p>By default you'll connect with all.</p>
+            </div>
+            <div>
+                <label for="mutual-connection">Mutual Connection Number</label>
+                <input type="number" min="0" id="mutual-connection" value="1" name="mutual">
+                <p>By default 1 Mutual Connection</p>
+            </div>
+        </div>
+        <div class="ext-controls">
+            <button id="connect" class="connect">Connect</button>
+            <button id="accept" class="accept disabled" disabled>Accept
+                <span class="accept-next-version">In next version</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

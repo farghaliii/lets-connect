@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "Let's Connect",
+  "version": "0.1",
+  "description": "LinkedIn Connector To Enlarge Your Network.",
+  "author": "Farghali",
+  "icons": {
+    "128": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.linkedin.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": ["tabs", "*://*.linkedin.com/*"],
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_title": "Let's Connect!",
+    "default_popup": "popup.html"
+  },
+  "incognito": "not_allowed"
+}

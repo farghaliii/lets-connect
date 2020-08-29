@@ -1,10 +1,20 @@
 chrome.runtime.onMessage.addListener(gotKeywords);
 
+// Generate Random Number [1 : 39980]
+function randNum() {
+    return (
+        Math.floor(Math.random() * 10) + 10)
+        * (Math.floor(Math.random() * 1000)
+        + Math.floor(Math.random() * 1000)
+        + 1
+    );
+}
+
 function scrollDown(scrollingPeriod) {
     return new Promise((resolve) => {
         const scrollDownInterval = setInterval(() => {
             window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
-        }, 1200);
+        }, randNum());
 
         setTimeout(() => {
             clearInterval(scrollDownInterval);
@@ -17,7 +27,7 @@ function isMemberSuitableToConnect(memberElem, keywords, filterMutualConn) {
     let occupation = memberElem.querySelector(".discover-person-card__occupation").innerText.trim().toLowerCase();
     let actualMutualConn = memberElem.querySelector(".member-insights__reason").innerText.trim().split(" ")[0];
     actualMutualConn = isNaN(actualMutualConn) ? 1 : Number(actualMutualConn);
- 
+
     if (actualMutualConn < filterMutualConn) {
         return false;
     }
@@ -31,28 +41,30 @@ function isMemberSuitableToConnect(memberElem, keywords, filterMutualConn) {
 }
 
 async function connectWithSuggestedMembers(userOptions) {
-    const scrollDownMsg = await scrollDown(userOptions.scrollingPeriod)
-    console.log(scrollDownMsg);
-    console.log(userOptions.keywords);
-    
-    let connectMembersBtns = document.querySelectorAll('[data-control-name="invite"], [data-control-name="people_connect"]');
-    
+    await scrollDown(userOptions.scrollingPeriod)
+    let connectMembersBtns = getConnectMembersBtns();
     connectMembersBtns.forEach(btn => {
         let memberEntityElem = btn.parentElement.parentElement.parentElement;
-        console.log("Check if memeber is suitable to connect.")
         if (isMemberSuitableToConnect(memberEntityElem, userOptions.keywords, userOptions.filterMutualConn)) {
-            setTimeout(() => {
-                btn.click()
-                console.log("Conected!");
-            }, Math.floor(Math.random() * 1000) + 500);
+            setTimeout(() => { btn.click() }, randNum());
         } else {
             console.log("Not Suitable To Connect!");
         }
     });
-
-    setTimeout(() => { location.reload(); }, 3000);
+    setTimeout(() => { location.reload(); }, 10000);
 }
 
 function gotKeywords(userOptions) {
     connectWithSuggestedMembers(userOptions);
+}
+
+function getConnectMembersBtns() {
+    let spans = document.querySelectorAll('span.artdeco-button__text');
+    let btns = []; 
+    spans.forEach(span => {
+        if(RegExp('Connect').test(span.textContent)) {
+            btns.push(span.parentElement);
+        }
+    }); 
+    return btns;
 }

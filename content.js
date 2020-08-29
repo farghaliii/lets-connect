@@ -1,14 +1,16 @@
 chrome.runtime.onMessage.addListener(letsConnect);
 async function letsConnect(userOptions) {
     await connectWithSuggestedMembers(userOptions);
-    location.reload();
+    setTimeout(() => {
+        location.reload();
+    }, (10 * 60 * 1000));
 }
 
 async function connectWithSuggestedMembers(userOptions) {
-    let periods = [300, 400, 600];
+    let periods = [300, 600, 900];
     await scrollDown(userOptions.scrollingPeriod)
     let connectMembersBtns = getConnectMembersBtns();
-    connectMembersBtns.forEach((btn, index) => {
+    for(const[index, btn] of connectMembersBtns.entries()) {
         let memberEntityElem = btn.parentElement.parentElement.parentElement;
         if (isMemberSuitableToConnect(memberEntityElem, userOptions.keywords, userOptions.filterMutualConn)) {
             setTimeout(() => { 
@@ -17,8 +19,8 @@ async function connectWithSuggestedMembers(userOptions) {
         } else {
             console.log("Not Suitable To Connect!");
         }
-    });
-    resolve("done");
+    }
+    return 'Done';
 }
 
 function scrollDown(scrollingPeriod) {
@@ -30,7 +32,7 @@ function scrollDown(scrollingPeriod) {
         setTimeout(() => {
             clearInterval(scrollDownInterval);
             resolve("scroll is done");
-        }, (scrollingPeriod * 60 * 1000));
+        }, (500));
     });
 }
 

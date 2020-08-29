@@ -1,10 +1,11 @@
 chrome.runtime.onMessage.addListener(letsConnect);
-function letsConnect(userOptions) {
-    connectWithSuggestedMembers(userOptions).then(() => {reload()});
+async function letsConnect(userOptions) {
+    await connectWithSuggestedMembers(userOptions);
+    location.reload();
 }
 
 async function connectWithSuggestedMembers(userOptions) {
-    let periods = [200, 300, 400];
+    let periods = [300, 400, 600];
     await scrollDown(userOptions.scrollingPeriod)
     let connectMembersBtns = getConnectMembersBtns();
     connectMembersBtns.forEach((btn, index) => {
@@ -17,6 +18,7 @@ async function connectWithSuggestedMembers(userOptions) {
             console.log("Not Suitable To Connect!");
         }
     });
+    resolve("done");
 }
 
 function scrollDown(scrollingPeriod) {
@@ -58,10 +60,6 @@ function isMemberSuitableToConnect(memberElem, keywords, filterMutualConn) {
         }
     }
     return false;
-}
-
-function reload() {
-    setTimeout(() => { location.reload(); }, 10000);
 }
 // Generate Random Number
 function randNum() {

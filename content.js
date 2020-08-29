@@ -32,7 +32,7 @@ function scrollDown(scrollingPeriod) {
         setTimeout(() => {
             clearInterval(scrollDownInterval);
             resolve("scroll is done");
-        }, (500));
+        }, (scrollingPeriod * 60 * 1000));
     });
 }
 

@@ -1,13 +1,22 @@
-chrome.runtime.onMessage.addListener(gotKeywords);
+chrome.runtime.onMessage.addListener(letsConnect);
+function letsConnect(userOptions) {
+    connectWithSuggestedMembers(userOptions).then(() => {reload()});
+}
 
-// Generate Random Number [1 : 39980]
-function randNum() {
-    return (
-        Math.floor(Math.random() * 10) + 10)
-        * (Math.floor(Math.random() * 1000)
-        + Math.floor(Math.random() * 1000)
-        + 1
-    );
+async function connectWithSuggestedMembers(userOptions) {
+    let periods = [200, 300, 400];
+    await scrollDown(userOptions.scrollingPeriod)
+    let connectMembersBtns = getConnectMembersBtns();
+    connectMembersBtns.forEach((btn, index) => {
+        let memberEntityElem = btn.parentElement.parentElement.parentElement;
+        if (isMemberSuitableToConnect(memberEntityElem, userOptions.keywords, userOptions.filterMutualConn)) {
+            setTimeout(() => { 
+                btn.click();
+            }, index * periods[Math.floor(Math.random() * periods.length)] );
+        } else {
+            console.log("Not Suitable To Connect!");
+        }
+    });
 }
 
 function scrollDown(scrollingPeriod) {
@@ -21,6 +30,17 @@ function scrollDown(scrollingPeriod) {
             resolve("scroll is done");
         }, (scrollingPeriod * 60 * 1000));
     });
+}
+
+function getConnectMembersBtns() {
+    let spans = document.querySelectorAll('span.artdeco-button__text');
+    let btns = []; 
+    spans.forEach(span => {
+        if(RegExp('Connect').test(span.textContent)) {
+            btns.push(span.parentElement);
+        }
+    }); 
+    return btns;
 }
 
 function isMemberSuitableToConnect(memberElem, keywords, filterMutualConn) {
@@ -40,31 +60,10 @@ function isMemberSuitableToConnect(memberElem, keywords, filterMutualConn) {
     return false;
 }
 
-async function connectWithSuggestedMembers(userOptions) {
-    await scrollDown(userOptions.scrollingPeriod)
-    let connectMembersBtns = getConnectMembersBtns();
-    connectMembersBtns.forEach(btn => {
-        let memberEntityElem = btn.parentElement.parentElement.parentElement;
-        if (isMemberSuitableToConnect(memberEntityElem, userOptions.keywords, userOptions.filterMutualConn)) {
-            setTimeout(() => { btn.click() }, randNum());
-        } else {
-            console.log("Not Suitable To Connect!");
-        }
-    });
+function reload() {
     setTimeout(() => { location.reload(); }, 10000);
 }
-
-function gotKeywords(userOptions) {
-    connectWithSuggestedMembers(userOptions);
-}
-
-function getConnectMembersBtns() {
-    let spans = document.querySelectorAll('span.artdeco-button__text');
-    let btns = []; 
-    spans.forEach(span => {
-        if(RegExp('Connect').test(span.textContent)) {
-            btns.push(span.parentElement);
-        }
-    }); 
-    return btns;
+// Generate Random Number
+function randNum() {
+    return (Math.floor(Math.random() * 10) + 10) * (Math.floor(Math.random() * 300) + 1);
 }

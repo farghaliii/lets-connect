@@ -24,7 +24,7 @@ function loading() {
     <div class='loading'>
         <h2>Wait Please...</h2>
         <p>The page will reload after finishing.</p>
-        <p>With defualt options the process almost takes from 3 min to 5 min.</p>
+        <p>With defualt options the process almost takes from 5 min to 15 min.</p>
         <p>Thank You.</p>
     </div>`;
 }
